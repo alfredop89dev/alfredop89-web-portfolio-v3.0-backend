@@ -1,19 +1,19 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
-const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 
-// CORS: solo acepta desde tu frontend
-const corsOptions = {
-  origin: 'https://alfredop89-web-portfolio-v3-0.vercel.app',
-  methods: ['POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-};
-
-app.use(cors(corsOptions));
-app.options('/send', cors(corsOptions)); // Manejo de preflight
+// CORS manual para evitar errores en Vercel
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://alfredop89-web-portfolio-v3-0.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204); // Preflight OK
+  }
+  next();
+});
 
 app.use(express.json());
 
@@ -28,6 +28,7 @@ app.post('/send', async (req, res) => {
     });
   }
 
+  // Configuración de transporte con Nodemailer
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -38,7 +39,7 @@ app.post('/send', async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"Formulario Web" <${process.env.EMAIL_USER}>`,
+      from: `"Mensaje desde Formulario Portafolio Web" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO,
       subject: `Nuevo mensaje: ${subject}`,
       html: `
