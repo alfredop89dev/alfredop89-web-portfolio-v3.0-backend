@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.js",
+      "src": "/api/send.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-       "src": "/(.*)",
-       "dest": "/",
+       "src": "/api/send(.*)",
+       "dest": "/api/send.js",
         "methods": ["POST", "OPTIONS"],
         "headers": {
            "Access-Control-Allow-Origin": "https://alfredop89-web-portfolio-v3-0.vercel.app",
