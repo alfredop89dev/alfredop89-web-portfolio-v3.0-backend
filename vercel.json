@@ -1,3 +1,16 @@
 {
-  "version": 2
-}
+    "version": 2,
+    "builds": [
+      {
+        "src": "/api/send.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/send",
+        "methods": ["POST"],
+        "dest": "/api/send.js"
+      }
+    ]
+  }
