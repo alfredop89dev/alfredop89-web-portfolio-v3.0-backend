@@ -1,21 +1,22 @@
 const nodemailer = require('nodemailer');
 
 module.exports = async (req, res) => {
-  // CORS headers
+  // CORS headers (aplicados en todas las respuestas)
   res.setHeader('Access-Control-Allow-Origin', 'https://alfredop89-web-portfolio-v3-0.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-  // Preflight
+  // Preflight request
   if (req.method === 'OPTIONS') {
-    return res.status(204).end();
+    return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Método no permitido' });
   }
 
-  // Body parsing manual (Vercel no lo hace automáticamente)
+  // Body parsing manual (Vercel no lo hace automáticamente con CommonJS)
   let body = '';
   await new Promise((resolve) => {
     req.on('data', chunk => body += chunk);
@@ -60,10 +61,10 @@ module.exports = async (req, res) => {
       `,
     });
 
-    res.status(200).json({ success: true });
+    return res.status(200).json({ success: true });
   } catch (err) {
     console.error('Error al enviar el correo:', err);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: 'Error interno al enviar el correo',
     });
