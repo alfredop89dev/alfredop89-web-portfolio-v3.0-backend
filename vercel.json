@@ -1,19 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "/api/send.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/send",
-        "methods": ["POST"],
-        "dest": "/api/send.js"
-      }
-    ],
-    "headers": [
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/send.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/send",
+      "dest": "/api/send.js"
+    }
+  ],
+  "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
@@ -24,4 +23,4 @@
       ]
     }
   ]
-  }
+}
