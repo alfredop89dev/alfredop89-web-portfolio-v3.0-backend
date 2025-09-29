@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 
 module.exports = async (req, res) => {
   // CORS headers (aplicados en todas las respuestas)
-  res.setHeader('Access-Control-Allow-Origin', 'https://alfredop89-web-portfolio-v3-0.vercel.app');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
