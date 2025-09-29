@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Preflight request
+  // Preflight
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
   }
@@ -15,7 +15,21 @@ module.exports = async (req, res) => {
     return res.status(405).json({ success: false, error: 'Método no permitido' });
   }
 
-  const { name, email, company, subject, message } = req.body;
+  // Body parsing manual (Vercel no lo hace automáticamente)
+  let body = '';
+  await new Promise((resolve) => {
+    req.on('data', chunk => body += chunk);
+    req.on('end', resolve);
+  });
+
+  let data;
+  try {
+    data = JSON.parse(body);
+  } catch (err) {
+    return res.status(400).json({ success: false, error: 'JSON inválido' });
+  }
+
+  const { name, email, company, subject, message } = data;
 
   if (!name || !email || !subject || !message) {
     return res.status(400).json({
